@@ -21,7 +21,7 @@ const { runCheckCode } = await import("../../src/flyway/check-code.js");
 
 describe("runCheckCode", () => {
   beforeEach(() => {
-    checkForCodeReviewViolations.mockResolvedValue({ exitCode: 0, violationCount: 0, violationCodes: [] });
+    checkForCodeReviewViolations.mockResolvedValue({ exitCode: 0, result: { violationCount: 0, violationCodes: [] } });
   });
 
   it("should return undefined when skipCodeReview is true", async () => {
@@ -100,9 +100,7 @@ describe("runCheckCode", () => {
   it("should return exitCode and reportPath from result", async () => {
     checkForCodeReviewViolations.mockResolvedValue({
       exitCode: 1,
-      reportPath: "/tmp/report.html",
-      violationCount: 1,
-      violationCodes: ["RG06"],
+      result: { reportPath: "/tmp/report.html", violationCount: 1, violationCodes: ["RG06"] },
     });
 
     const result = await runCheckCode({});

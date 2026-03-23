@@ -12,11 +12,15 @@ type CodeReviewErrorOutput = {
   error?: { errorCode?: string; message?: string; results?: CodeResultItem[]; htmlReport?: string };
 };
 
-type CheckForCodeReviewResult = {
-  exitCode: number;
+type CodeReviewResult = {
   reportPath?: string;
   violationCount: number;
   violationCodes: string[];
+};
+
+type CheckForCodeReviewResult = {
+  exitCode: number;
+  result: CodeReviewResult;
 };
 
 const checkForCodeReviewViolations = async (
@@ -32,7 +36,7 @@ const checkForCodeReviewViolations = async (
       errorOutput?.error?.message && core.error(errorOutput.error.message);
       const violations = extractViolations(errorOutput?.error?.results ?? []);
       setOutput(violations);
-      return { exitCode: result.exitCode, reportPath: errorOutput?.error?.htmlReport, ...violations };
+      return { exitCode: result.exitCode, result: { reportPath: errorOutput?.error?.htmlReport, ...violations } };
     }
 
     const output = parseSuccessOutput(result.stdout);
@@ -40,7 +44,7 @@ const checkForCodeReviewViolations = async (
     const resultItems = codeResults?.flatMap((r) => r.results ?? []) ?? [];
     const violations = extractViolations(resultItems);
     setOutput(violations);
-    return { exitCode: result.exitCode, reportPath: output?.htmlReport, ...violations };
+    return { exitCode: result.exitCode, result: { reportPath: output?.htmlReport, ...violations } };
   } finally {
     core.endGroup();
   }

@@ -21,7 +21,7 @@ const { runCheckCode } = await import("../../src/flyway/check-code.js");
 
 describe("runCheckCode", () => {
   beforeEach(() => {
-    checkForCodeReviewViolations.mockResolvedValue({ exitCode: 0, violationCount: 0, violationCodes: [] });
+    checkForCodeReviewViolations.mockResolvedValue({ exitCode: 0, result: { violationCount: 0, violationCodes: [] } });
   });
 
   it("should return undefined when skipCodeReview is true", async () => {
