@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import { runFlyway } from "./flyway-runner.js";
+import { runFlyway } from "../flyway-runner.js";
 
 type CodeResultItem = { violations?: { code?: string }[] };
 
@@ -14,9 +14,11 @@ type CodeReviewErrorOutput = {
 
 type CheckForCodeReviewResult = {
   exitCode: number;
-  reportPath?: string;
-  violationCount: number;
-  violationCodes: string[];
+  result: {
+    reportPath?: string;
+    violationCount: number;
+    violationCodes: string[];
+  };
 };
 
 const checkForCodeReviewViolations = async (
@@ -32,7 +34,7 @@ const checkForCodeReviewViolations = async (
       errorOutput?.error?.message && core.error(errorOutput.error.message);
       const violations = extractViolations(errorOutput?.error?.results ?? []);
       setOutput(violations);
-      return { exitCode: result.exitCode, reportPath: errorOutput?.error?.htmlReport, ...violations };
+      return { exitCode: result.exitCode, result: { reportPath: errorOutput?.error?.htmlReport, ...violations } };
     }
 
     const output = parseSuccessOutput(result.stdout);
@@ -40,7 +42,7 @@ const checkForCodeReviewViolations = async (
     const resultItems = codeResults?.flatMap((r) => r.results ?? []) ?? [];
     const violations = extractViolations(resultItems);
     setOutput(violations);
-    return { exitCode: result.exitCode, reportPath: output?.htmlReport, ...violations };
+    return { exitCode: result.exitCode, result: { reportPath: output?.htmlReport, ...violations } };
   } finally {
     core.endGroup();
   }
@@ -76,4 +78,3 @@ const parseErrorOutput = (stdout: string): CodeReviewErrorOutput | undefined => 
 };
 
 export { checkForCodeReviewViolations };
-export type { CheckForCodeReviewResult };

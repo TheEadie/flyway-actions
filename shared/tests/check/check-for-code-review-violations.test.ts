@@ -1,4 +1,4 @@
-import { mockExec } from "../src/test-utils.js";
+import { mockExec } from "../../src/test-utils.js";
 
 const setOutput = vi.fn();
 const error = vi.fn();
@@ -16,7 +16,7 @@ vi.doMock("@actions/exec", () => ({
   exec,
 }));
 
-const { checkForCodeReviewViolations } = await import("../src/check-for-code-review-violations.js");
+const { checkForCodeReviewViolations } = await import("../../src/check/check-for-code-review-violations.js");
 
 describe("checkForCodeReviewViolations", () => {
   it("should set violation count to 0 when no violations found", async () => {
@@ -30,7 +30,7 @@ describe("checkForCodeReviewViolations", () => {
 
     const result = await checkForCodeReviewViolations(["code"]);
 
-    expect(result).toEqual(expect.objectContaining({ exitCode: 0, violationCount: 0, violationCodes: [] }));
+    expect(result).toEqual(expect.objectContaining({ exitCode: 0, result: { violationCount: 0, violationCodes: [] } }));
     expect(setOutput).toHaveBeenCalledWith("code-violation-count", "0");
     expect(setOutput).toHaveBeenCalledWith("code-violation-codes", "");
   });
@@ -54,9 +54,11 @@ describe("checkForCodeReviewViolations", () => {
 
     expect(result).toEqual({
       exitCode: 0,
-      reportPath: "report.html",
-      violationCount: 3,
-      violationCodes: ["AM04", "RG06"],
+      result: {
+        reportPath: "report.html",
+        violationCount: 3,
+        violationCodes: ["AM04", "RG06"],
+      },
     });
     expect(setOutput).toHaveBeenCalledWith("code-violation-count", "3");
     expect(setOutput).toHaveBeenCalledWith("code-violation-codes", "AM04,RG06");
@@ -81,9 +83,11 @@ describe("checkForCodeReviewViolations", () => {
 
     expect(result).toEqual({
       exitCode: 1,
-      reportPath: "/tmp/report.html",
-      violationCount: 1,
-      violationCodes: ["AM04"],
+      result: {
+        reportPath: "/tmp/report.html",
+        violationCount: 1,
+        violationCodes: ["AM04"],
+      },
     });
     expect(error).toHaveBeenCalledWith("Code Analysis Violation(s) detected");
     expect(setOutput).toHaveBeenCalledWith("code-violation-count", "1");
@@ -100,7 +104,7 @@ describe("checkForCodeReviewViolations", () => {
 
     const result = await checkForCodeReviewViolations(["code"]);
 
-    expect(result).toEqual(expect.objectContaining({ exitCode: 1, violationCount: 0, violationCodes: [] }));
+    expect(result).toEqual(expect.objectContaining({ exitCode: 1, result: { violationCount: 0, violationCodes: [] } }));
     expect(error).toHaveBeenCalledWith("Something failed");
   });
 
@@ -109,7 +113,7 @@ describe("checkForCodeReviewViolations", () => {
 
     const result = await checkForCodeReviewViolations(["code"]);
 
-    expect(result).toEqual(expect.objectContaining({ exitCode: 1, violationCount: 0, violationCodes: [] }));
+    expect(result).toEqual(expect.objectContaining({ exitCode: 1, result: { violationCount: 0, violationCodes: [] } }));
   });
 
   it("should ignore non-code individual results", async () => {
@@ -126,6 +130,8 @@ describe("checkForCodeReviewViolations", () => {
 
     const result = await checkForCodeReviewViolations(["code"]);
 
-    expect(result).toEqual(expect.objectContaining({ violationCount: 1, violationCodes: ["AM04"] }));
+    expect(result).toEqual(
+      expect.objectContaining({ result: expect.objectContaining({ violationCount: 1, violationCodes: ["AM04"] }) }),
+    );
   });
 });

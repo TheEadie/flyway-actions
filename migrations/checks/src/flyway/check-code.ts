@@ -21,8 +21,8 @@ const runCheckCode = async (inputs: FlywayMigrationsChecksInputs) => {
   if (!args) {
     return undefined;
   }
-  const result = await checkForCodeReviewViolations(args, inputs.workingDirectory);
-  return { exitCode: result.exitCode, reportPath: result.reportPath };
+  const { exitCode, result } = await checkForCodeReviewViolations(args, inputs.workingDirectory);
+  return { exitCode, reportPath: result.reportPath };
 };
 
 export { runCheckCode };

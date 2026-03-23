@@ -10535,15 +10535,19 @@ var ln = () => {
 			let t = jn(e?.error?.results ?? []);
 			return Mn(t), {
 				exitCode: n.exitCode,
-				reportPath: e?.error?.htmlReport,
-				...t
+				result: {
+					reportPath: e?.error?.htmlReport,
+					...t
+				}
 			};
 		}
 		let r = Nn(n.stdout), i = jn((r?.individualResults?.filter((e) => e.operation === "code"))?.flatMap((e) => e.results ?? []) ?? []);
 		return Mn(i), {
 			exitCode: n.exitCode,
-			reportPath: r?.htmlReport,
-			...i
+			result: {
+				reportPath: r?.htmlReport,
+				...i
+			}
 		};
 	} finally {
 		cn();
@@ -10582,10 +10586,10 @@ var ln = () => {
 }, In = async (e) => {
 	let t = Fn(e);
 	if (!t) return;
-	let n = await An(t, e.workingDirectory);
+	let { exitCode: n, result: r } = await An(t, e.workingDirectory);
 	return {
-		exitCode: n.exitCode,
-		reportPath: n.reportPath
+		exitCode: n,
+		reportPath: r.reportPath
 	};
 }, Ln = (e) => {
 	try {

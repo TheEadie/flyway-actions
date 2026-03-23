@@ -62,9 +62,9 @@ const run = async (): Promise<void> => {
     }
 
     const codeReviewResult = await runCheckCode(inputs, scriptPath);
-    if (codeReviewResult && codeReviewResult.violationCount > 0 && inputs.failOnCodeReview) {
+    if (codeReviewResult && codeReviewResult.result.violationCount > 0 && inputs.failOnCodeReview) {
       core.setOutput("exit-code", "1");
-      core.setFailed(`Code review failed with ${codeReviewResult.violationCount} violation(s).`);
+      core.setFailed(`Code review failed with ${codeReviewResult.result.violationCount} violation(s).`);
       return;
     }
   } catch (error) {

@@ -1,6 +1,6 @@
-import type { Drift, FlywayCheckOutput } from "./types.js";
+import type { Drift, FlywayCheckOutput } from "../types.js";
 import * as core from "@actions/core";
-import { parseDriftErrorOutput, runFlyway } from "./flyway-runner.js";
+import { parseDriftErrorOutput, runFlyway } from "../flyway-runner.js";
 
 type CheckForDriftOutput = {
   driftDetected?: boolean;
