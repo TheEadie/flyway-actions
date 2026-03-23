@@ -65,6 +65,7 @@ jobs:
         with:
           target-url: jdbc:sqlite:database/no-drift.db
           working-directory: sample-projects/sqlite
+          deployment-report-name: flyway-deployment-report-${{ matrix.os }}
       - name: Run undo
         id: undo
         uses: ./migrations/undo
@@ -73,6 +74,7 @@ jobs:
         with:
           target-url: jdbc:sqlite:database/no-drift.db
           working-directory: sample-projects/sqlite
+          undo-report-name: flyway-undo-report-${{ matrix.os }}
       - name: Download report
         uses: actions/download-artifact@v8
         with:
@@ -294,6 +296,7 @@ jobs:
           target-url: jdbc:sqlite:state-prepare-target.db
           working-directory: sample-projects/sqlite-state
           fail-on-code-review: 'false'
+          pre-deployment-report-name: flyway-e2e-pre-deployment-report-${{ matrix.os }}
           deployment-script-name: flyway-e2e-deployment-script-${{ matrix.os }}
           undo-script-name: flyway-e2e-undo-script-${{ matrix.os }}
           deployment-script-retention-days: '1'
@@ -306,6 +309,7 @@ jobs:
           target-url: jdbc:sqlite:state-prepare-target.db
           working-directory: sample-projects/sqlite-state
           script-path: ${{ steps.prepare.outputs.script-path }}
+          deployment-report-name: flyway-e2e-deployment-report-${{ matrix.os }}
       - name: Run state deploy with undo script
         id: undo
         uses: ./state/deploy

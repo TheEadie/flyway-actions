@@ -308,6 +308,7 @@ jobs:
         with:
           target-url: jdbc:sqlite:database/no-drift.db
           working-directory: sample-projects/sqlite
+          deployment-report-name: flyway-deployment-report-no-drift-${{ matrix.os }}
       - name: Test outputs
         shell: bash
         run: |
@@ -426,6 +427,7 @@ jobs:
         with:
           target-url: jdbc:sqlite:database/undo.db
           working-directory: sample-projects/sqlite
+          undo-report-name: flyway-undo-report-no-drift-${{ matrix.os }}
       - name: Test outputs
         shell: bash
         run: |
@@ -546,6 +548,7 @@ jobs:
           target-url: jdbc:sqlite:state-prepare-target.db
           working-directory: sample-projects/sqlite-state
           skip-code-review: 'true'
+          pre-deployment-report-name: flyway-pre-deployment-report-no-drift-${{ matrix.os }}
           deployment-script-name: flyway-deployment-script-${{ matrix.os }}
           undo-script-name: flyway-undo-script-${{ matrix.os }}
           deployment-script-retention-days: '1'
@@ -736,6 +739,7 @@ jobs:
           target-url: jdbc:sqlite:state-target.db
           script-path: deployments/D__deployment.sql
           working-directory: sample-projects/sqlite
+          deployment-report-name: flyway-deployment-report-no-drift-state-${{ matrix.os }}
       - name: Test outputs
         shell: bash
         run: |
