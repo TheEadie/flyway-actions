@@ -10527,15 +10527,19 @@ var un = () => {
 			let t = kn(e?.error?.results ?? []);
 			return An(t), {
 				exitCode: n.exitCode,
-				reportPath: e?.error?.htmlReport,
-				...t
+				result: {
+					reportPath: e?.error?.htmlReport,
+					...t
+				}
 			};
 		}
 		let r = jn(n.stdout), i = kn((r?.individualResults?.filter((e) => e.operation === "code"))?.flatMap((e) => e.results ?? []) ?? []);
 		return An(i), {
 			exitCode: n.exitCode,
-			reportPath: r?.htmlReport,
-			...i
+			result: {
+				reportPath: r?.htmlReport,
+				...i
+			}
 		};
 	} finally {
 		ln();
@@ -10715,8 +10719,8 @@ await (async () => {
 			return;
 		}
 		let r = await Pn(t, n);
-		if (r && r.violationCount > 0 && t.failOnCodeReview) {
-			nn("exit-code", "1"), rn(`Code review failed with ${r.violationCount} violation(s).`);
+		if (r && r.result.violationCount > 0 && t.failOnCodeReview) {
+			nn("exit-code", "1"), rn(`Code review failed with ${r.result.violationCount} violation(s).`);
 			return;
 		}
 	} catch (e) {
