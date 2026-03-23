@@ -1,4 +1,4 @@
-import { mockExec } from "../src/test-utils.js";
+import { mockExec } from "../../src/test-utils.js";
 
 const setOutput = vi.fn();
 const error = vi.fn();
@@ -16,7 +16,7 @@ vi.doMock("@actions/exec", () => ({
   exec,
 }));
 
-const { checkForCodeReviewViolations } = await import("../src/check-for-code-review-violations.js");
+const { checkForCodeReviewViolations } = await import("../../src/check/check-for-code-review-violations.js");
 
 describe("checkForCodeReviewViolations", () => {
   it("should set violation count to 0 when no violations found", async () => {

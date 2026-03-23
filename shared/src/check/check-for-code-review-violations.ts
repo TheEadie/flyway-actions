@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import { runFlyway } from "./flyway-runner.js";
+import { runFlyway } from "../flyway-runner.js";
 
 type CodeResultItem = { violations?: { code?: string }[] };
 

@@ -1,4 +1,4 @@
-import { mockExec } from "../src/test-utils.js";
+import { mockExec } from "../../src/test-utils.js";
 
 const setOutput = vi.fn();
 const info = vi.fn();
@@ -17,7 +17,7 @@ vi.doMock("@actions/exec", () => ({
   exec,
 }));
 
-const { checkForChanges } = await import("../src/check-for-changes.js");
+const { checkForChanges } = await import("../../src/check/check-for-changes.js");
 
 describe("checkForChanges", () => {
   it("should return zero changes and set outputs when exit code is 0 with no changes", async () => {

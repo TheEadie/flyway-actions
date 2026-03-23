@@ -1,4 +1,4 @@
-import { mockExec } from "../src/test-utils.js";
+import { mockExec } from "../../src/test-utils.js";
 
 const info = vi.fn();
 const exec = vi.fn();
@@ -14,7 +14,7 @@ vi.doMock("@actions/exec", () => ({
   exec,
 }));
 
-const { checkForDrift } = await import("../src/check-for-drift.js");
+const { checkForDrift } = await import("../../src/check/check-for-drift.js");
 
 const driftArgs = (url: string) => ["check", "-drift", "-check.failOnDrift=true", `-url=${url}`];
 

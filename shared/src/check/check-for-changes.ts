@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import { parseErrorOutput, runFlyway } from "./flyway-runner.js";
+import { parseErrorOutput, runFlyway } from "../flyway-runner.js";
 
 type Changes = { operation?: "changes"; onlyInSource?: unknown[]; onlyInTarget?: unknown[]; differences?: unknown[] };
 
