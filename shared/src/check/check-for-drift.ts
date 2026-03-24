@@ -16,16 +16,14 @@ type Drift = {
 
 type FlywayCheckOutput = { htmlReport?: string; individualResults?: (Drift | { operation?: string })[] };
 
-type CheckForDriftOutput = {
-  driftDetected?: boolean;
-  comparisonSupported: boolean;
-  reportPath?: string;
-  driftResolutionFolder?: string;
-};
-
 type CheckForDriftResult = {
   exitCode: number;
-  result: CheckForDriftOutput;
+  result: {
+    driftDetected?: boolean;
+    comparisonSupported: boolean;
+    reportPath?: string;
+    driftResolutionFolder?: string;
+  };
 };
 
 const checkForDrift = async (args: string[], workingDirectory?: string): Promise<CheckForDriftResult> => {
