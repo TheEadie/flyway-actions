@@ -1,5 +1,6 @@
+import type { ErrorOutput } from "../types.js";
 import * as core from "@actions/core";
-import { parseErrorOutput, runFlyway } from "../flyway-runner.js";
+import { parseOutput, runFlyway } from "../flyway-runner.js";
 
 type Changes = { operation?: "changes"; onlyInSource?: unknown[]; onlyInTarget?: unknown[]; differences?: unknown[] };
 
@@ -13,14 +14,6 @@ type CheckForChangesResult = {
   };
 };
 
-const parseOutput = (stdout: string): CheckChangesOutput | undefined => {
-  try {
-    return JSON.parse(stdout) as CheckChangesOutput;
-  } catch {
-    return undefined;
-  }
-};
-
 const checkForChanges = async (
   args: string[],
   workingDirectory?: string,
@@ -31,7 +24,7 @@ const checkForChanges = async (
     const result = await runFlyway(args, workingDirectory);
 
     if (result.exitCode !== 0) {
-      const errorOutput = parseErrorOutput(result.stdout);
+      const errorOutput = parseOutput<ErrorOutput>(result.stdout);
       if (errorOutput?.error?.errorCode === "COMPARISON_DATABASE_NOT_SUPPORTED") {
         core.info(
           "Deployment changes report could not be generated because advanced comparison features are not supported for this database type.",
@@ -48,7 +41,7 @@ const checkForChanges = async (
       return { exitCode: result.exitCode };
     }
 
-    const output = parseOutput(result.stdout);
+    const output = parseOutput<CheckChangesOutput>(result.stdout);
 
     return {
       exitCode: result.exitCode,

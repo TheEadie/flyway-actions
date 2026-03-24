@@ -1,6 +1,6 @@
-import type { Drift, FlywayCheckOutput } from "../types.js";
+import type { Drift, DriftErrorOutput, FlywayCheckOutput } from "../types.js";
 import * as core from "@actions/core";
-import { parseDriftErrorOutput, runFlyway } from "../flyway-runner.js";
+import { parseOutput, runFlyway } from "../flyway-runner.js";
 
 type CheckForDriftOutput = {
   driftDetected?: boolean;
@@ -14,21 +14,13 @@ type CheckForDriftResult = {
   result: CheckForDriftOutput;
 };
 
-const parseCheckOutput = (stdout: string): FlywayCheckOutput | undefined => {
-  try {
-    return JSON.parse(stdout) as FlywayCheckOutput;
-  } catch {
-    return undefined;
-  }
-};
-
 const checkForDrift = async (args: string[], workingDirectory?: string): Promise<CheckForDriftResult> => {
   core.startGroup("Checking for drift");
   try {
     const result = await runFlyway(args, workingDirectory);
 
     if (result.exitCode !== 0) {
-      const errorOutput = parseDriftErrorOutput(result.stdout);
+      const errorOutput = parseOutput<DriftErrorOutput>(result.stdout);
       if (errorOutput?.error?.errorCode === "CHECK_DRIFT_DETECTED") {
         return {
           exitCode: result.exitCode,
@@ -50,7 +42,7 @@ const checkForDrift = async (args: string[], workingDirectory?: string): Promise
       return { exitCode: result.exitCode, result: { driftDetected: false, comparisonSupported: true } };
     }
 
-    const output = parseCheckOutput(result.stdout);
+    const output = parseOutput<FlywayCheckOutput>(result.stdout);
     const driftResult = output?.individualResults?.find((r): r is Drift => r.operation === "drift");
     return {
       exitCode: result.exitCode,
