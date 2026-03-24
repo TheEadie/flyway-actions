@@ -10417,7 +10417,8 @@ var un = () => {
 	let { listeners: n, getOutput: r } = dn(), i = fn(), a = [
 		...e,
 		"-outputType=json",
-		"-outputLogsInJson=true"
+		"-outputLogsInJson=true",
+		"-skipCheckForUpdate"
 	];
 	sn(`Running: flyway ${mn(a).join(" ")}`);
 	let o = await Zt("flyway", a, {
@@ -10437,7 +10438,11 @@ var un = () => {
 }, gn = async () => {
 	let { listener: e, getOutput: t } = un();
 	try {
-		return await Zt("flyway", ["version", "-outputType=json"], {
+		return await Zt("flyway", [
+			"version",
+			"-outputType=json",
+			"-skipCheckForUpdate"
+		], {
 			silent: !0,
 			listeners: { stdout: e }
 		}), {
