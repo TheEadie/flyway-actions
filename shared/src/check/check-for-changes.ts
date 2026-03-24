@@ -2,9 +2,14 @@ import type { ErrorOutput } from "../types.js";
 import * as core from "@actions/core";
 import { parseOutput, runFlyway } from "../flyway-runner.js";
 
-type Changes = { operation?: "changes"; onlyInSource?: unknown[]; onlyInTarget?: unknown[]; differences?: unknown[] };
+type ChangeItem = {
+  operation?: "changes";
+  onlyInSource?: unknown[];
+  onlyInTarget?: unknown[];
+  differences?: unknown[];
+};
 
-type CheckChangesOutput = { htmlReport?: string; individualResults?: (Changes & { operation?: string })[] };
+type CheckChangesOutput = { htmlReport?: string; individualResults?: (ChangeItem & { operation?: string })[] };
 
 type CheckForChangesResult = {
   exitCode: number;
@@ -53,7 +58,7 @@ const checkForChanges = async (
 };
 
 const countChangedObjects = (output: CheckChangesOutput | undefined): number => {
-  const changesResults = output?.individualResults?.filter((r): r is Changes => r.operation === "changes");
+  const changesResults = output?.individualResults?.filter((r): r is ChangeItem => r.operation === "changes");
   if (!changesResults?.length) {
     return 0;
   }
