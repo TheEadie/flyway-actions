@@ -1,6 +1,20 @@
-import type { Drift, DriftErrorOutput, FlywayCheckOutput } from "../types.js";
+import type { ErrorOutput } from "../types.js";
 import * as core from "@actions/core";
 import { parseOutput, runFlyway } from "../flyway-runner.js";
+
+type DriftErrorOutput = { error?: ErrorOutput["error"] & { htmlReport?: string; driftResolutionFolderPath?: string } };
+
+type Drift = {
+  operation?: "drift";
+  onlyInSource?: unknown[];
+  onlyInTarget?: unknown[];
+  differences?: unknown[];
+  driftResolutionFolder?: string;
+  driftDetected: boolean;
+  driftCheckSkipped: boolean;
+};
+
+type FlywayCheckOutput = { htmlReport?: string; individualResults?: (Drift | { operation?: string })[] };
 
 type CheckForDriftOutput = {
   driftDetected?: boolean;
