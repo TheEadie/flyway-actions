@@ -20,6 +20,7 @@ type Drift = {
   onlyInTarget?: unknown[];
   differences?: unknown[];
   driftResolutionFolder?: string;
+  driftDetected: boolean;
 };
 
 type FlywayCheckOutput = { htmlReport?: string; individualResults?: (Drift | { operation?: string })[] };
